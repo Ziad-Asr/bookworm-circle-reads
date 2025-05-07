@@ -7,7 +7,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { AreaChart, BarChart } from "@/components/ui/chart";
+import { AreaChart, BarChart } from "@/components/ui/charts";
 
 export default function ReadingStats() {
   return (
