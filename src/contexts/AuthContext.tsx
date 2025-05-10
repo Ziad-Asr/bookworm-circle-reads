@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/sonner";
 
 interface User {
   id: number;
@@ -24,7 +24,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,18 +54,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await response.json();
       setUser(data);
       localStorage.setItem('user', JSON.stringify(data));
-      toast({
-        title: "Login successful",
-        description: "Welcome back to MyBookShelf!",
-      });
+      toast("Login successful. Welcome back to MyBookShelf!");
       navigate('/');
     } catch (error) {
       console.error('Login error:', error);
-      toast({
-        title: "Login failed",
-        description: error instanceof Error ? error.message : "Please check your credentials and try again.",
-        variant: "destructive",
-      });
+      toast(error instanceof Error ? error.message : "Please check your credentials and try again.");
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -91,18 +84,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await response.json();
       setUser(data);
       localStorage.setItem('user', JSON.stringify(data));
-      toast({
-        title: "Registration successful",
-        description: "Welcome to MyBookShelf!",
-      });
+      toast("Registration successful. Welcome to MyBookShelf!");
       navigate('/');
     } catch (error) {
       console.error('Registration error:', error);
-      toast({
-        title: "Registration failed",
-        description: error instanceof Error ? error.message : "Please try again with different credentials.",
-        variant: "destructive",
-      });
+      toast(error instanceof Error ? error.message : "Please try again with different credentials.");
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -111,10 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out.",
-    });
+    toast("You have been successfully logged out.");
     navigate('/login');
   };
 

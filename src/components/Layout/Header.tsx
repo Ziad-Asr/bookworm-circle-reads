@@ -19,15 +19,17 @@ export function Header() {
         
         {!isMobile && (
           <nav className="flex items-center ml-6 gap-6 text-sm">
-            <Link to="/discover" className="font-medium transition-colors hover:text-bookshelf-primary">
-              Discover
-            </Link>
             <Link to="/bookclubs" className="font-medium transition-colors hover:text-bookshelf-primary">
               Book Clubs
             </Link>
             <Link to="/discussions" className="font-medium transition-colors hover:text-bookshelf-primary">
               Discussions
             </Link>
+            {isAuthenticated() && (
+              <Link to="/mybooks" className="font-medium transition-colors hover:text-bookshelf-primary">
+                My Books
+              </Link>
+            )}
           </nav>
         )}
         
