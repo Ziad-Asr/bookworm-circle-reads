@@ -1,11 +1,13 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, BookOpen, User } from "lucide-react";
+import { Search, BookOpen, User, LogOut } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Header() {
   const isMobile = useIsMobile();
+  const { user, logout, isAuthenticated } = useAuth();
   
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
@@ -33,19 +35,43 @@ export function Header() {
           <Button variant="ghost" size="icon">
             <Search className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/profile">
-              <User className="h-5 w-5" />
-            </Link>
-          </Button>
-          {isMobile ? (
-            <Button size="sm" asChild>
-              <Link to="/login">Sign In</Link>
-            </Button>
+          
+          {isAuthenticated() ? (
+            <>
+              <Button variant="ghost" size="icon" asChild>
+                <Link to="/profile">
+                  <User className="h-5 w-5" />
+                </Link>
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={logout} 
+                title="Logout"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+              {!isMobile && (
+                <div className="text-sm font-medium ml-2">
+                  {user?.fullName}
+                </div>
+              )}
+            </>
           ) : (
-            <Button asChild>
-              <Link to="/login">Sign In</Link>
-            </Button>
+            isMobile ? (
+              <Button size="sm" asChild>
+                <Link to="/login">Sign In</Link>
+              </Button>
+            ) : (
+              <div className="flex gap-2">
+                <Button variant="outline" asChild>
+                  <Link to="/signup">Sign Up</Link>
+                </Button>
+                <Button asChild>
+                  <Link to="/login">Sign In</Link>
+                </Button>
+              </div>
+            )
           )}
         </div>
       </div>
